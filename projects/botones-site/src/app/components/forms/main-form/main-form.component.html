@@ -1,0 +1,54 @@
+<form autocomplete="off" [formGroup]="mainForm">
+  <input formControlName="id" type="hidden" />
+  <div fxLayout="column" fxLayoutAlign="space-around left">
+    <mat-form-field>
+      <input formControlName="title" matInput maxlength="30" placeholder="Título *" />
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input formControlName="link" matInput maxlength="255" placeholder="Enlace *" />
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%">
+      <mat-label>Color *</mat-label>
+      <mat-select formControlName="color">
+        <mat-option *ngFor="let color of colors" [value]="color" >
+          <div [ngStyle]="{'background-color': color}" style="width: 30px;height: 30px; float:left"> </div>{{color}}
+        </mat-option>
+      </mat-select>
+    </div>
+    <div fxFlex="50%">
+    </div>
+  </div>
+  <mat-form-field style="margin-top: 5px;">
+    <input formControlName="order" matInput placeholder="Orden *" />
+    <mat-error>
+      <ng-container *ngIf="order.hasError('required')">Este campo es obligatorio</ng-container>
+      <ng-container *ngIf="order.hasError('pattern')">Valor numérico inválido</ng-container>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="chip-list" style="width: 100%;">
+    <mat-chip-list #chipList aria-label="Búsqueda">
+      <mat-chip *ngFor="let item of keywords" [removable]="true" (removed)="removeKeyword(item)">
+        {{ item }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Palabras clave"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addKeyword($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%">
+      <shared-image-upload-control (change)="checkImage()" label="Imagen" [file]="mainImage" (fileChange)="mainImage = $event"></shared-image-upload-control>
+    </div>
+  </div>
+</form>

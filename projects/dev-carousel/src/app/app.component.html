@@ -1,0 +1,5 @@
+<ngx-slick-carousel class="carousel" [config]="slideConfig">
+  <div class="slide" ngxSlickItem *ngFor="let item of news">
+    <img src="{{ item.image }}" />
+  </div>
+</ngx-slick-carousel>

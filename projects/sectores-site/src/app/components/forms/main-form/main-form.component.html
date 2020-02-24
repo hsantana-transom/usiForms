@@ -1,0 +1,103 @@
+<form autocomplete="off" [formGroup]="mainForm">
+  <input formControlName="id" type="hidden" />
+  <mat-form-field style="width: 100%;">
+    <input formControlName="title" matInput maxlength="30" placeholder="Título *" />
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+  <div fxLayout="row" fxLayoutAlign="space-around left">
+    <div fxFlex="50%">
+      <mat-form-field>
+        <mat-label>Selecciona Acción</mat-label>
+        <mat-select formControlName="action" (selectionChange)="onActionSelected($event.value)">
+          <mat-option value='Enlace'>Enlace</mat-option>
+          <mat-option value='Contenido'>Contenido</mat-option>
+        </mat-select>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50%">
+      <mat-form-field>
+        <mat-label>Selecciona Color *</mat-label>
+        <mat-select formControlName="color">
+          <mat-option value='Naranja'>Naranja</mat-option>
+          <mat-option value='Rojo'>Rojo</mat-option>
+          <mat-option value='Gris'>Gris</mat-option>
+          <mat-option value='Verde Claro'>Verde Claro</mat-option>
+          <mat-option value='Verde'>Verde</mat-option>
+        </mat-select>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div *ngIf="bandContenido">
+    <mat-form-field style="width: 100%;">
+      <input formControlName="titleContent" matInput maxlength="30" placeholder="Título Contenido *" />
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 100%;">
+      <mat-label>Contenido *</mat-label>
+      <textarea formControlName="content" matInput maxlength="750" rows="1"></textarea>
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div *ngIf="bandEnlace">
+    <mat-form-field style="width: 100%;">
+      <input formControlName="link" matInput maxlength="255" placeholder="Url *" />
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-form-field>
+    <mat-label>Selecciona Forma *</mat-label>
+    <mat-select formControlName="shape">
+      <mat-option value='Cuadrado'>Cuadrado</mat-option>
+      <mat-option value='Hexagonal'>Hexagonal</mat-option>
+    </mat-select>
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+  <div fxLayout="row" fxLayoutAlign="space-around left">
+    <div fxFlex="50%">
+      <mat-form-field style="margin-right: 10px;">
+        <input formControlName="order" matInput placeholder="Orden *" />
+        <mat-error>
+          <ng-container *ngIf="order.hasError('required')">Este campo es obligatorio</ng-container>
+          <ng-container *ngIf="order.hasError('pattern')">Valor numérico inválido</ng-container>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50%">
+      <mat-form-field class="chip-list">
+        <mat-chip-list #chipList aria-label="Búsqueda">
+          <mat-chip *ngFor="let item of keywords" [removable]="true" (removed)="removeKeyword(item)">
+            {{ item }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="Palabras clave"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addKeyword($event)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%">
+      <shared-image-upload-control (change)="checkImage()" label="Imagen principal *" [file]="mainImage" (fileChange)="mainImage = $event"></shared-image-upload-control>
+    </div>
+  </div>
+</form>

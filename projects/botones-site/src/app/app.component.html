@@ -1,0 +1,12 @@
+<h1>Administración Botones</h1>
+<div *ngIf="!bandItems">
+  <shared-add-button text="Agregar" (callback)="onAdd()"></shared-add-button>
+</div>
+<div *ngIf="bandItems">
+  <span style="color: red;">*Alcanzaste el número de botones permitidos</span>
+</div>
+<br />
+<br />
+<div class="mat-elevation-z8 p1">
+  <app-main-table></app-main-table>
+</div>

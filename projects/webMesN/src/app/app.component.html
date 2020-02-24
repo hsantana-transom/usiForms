@@ -1,0 +1,124 @@
+<!--<div *ngFor="let item of data">
+  <div style="border:1px solid black; width:150px">
+    <img src="{{item.Imagen}}" width="100px" height="100px"/>
+    <div>
+      <h3>{{item.Title}}</h3>
+    </div>
+    <div>
+      <p>{{item.fechaActualizacion}}</p>
+    </div>
+  </div>
+
+</div>
+-->
+<table *ngIf="cards.length>0" style="width: 80%;">
+  <tr style="height: 475;">
+    <td>
+      <div>
+        <img src="{{cards[actualPage - 1][0].Imagen}}" />
+        <div>
+          <p style="font-size: 13px;">{{cards[actualPage - 1][0].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][0].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="cards[actualPage - 1][1]">
+        <img src="{{cards[actualPage - 1][1].Imagen}}"/>
+        <div>
+          <p style="font-size: 13px;">{{cards[actualPage - 1][1].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][1].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="cards[actualPage - 1][2]">
+        <img src="{{cards[actualPage - 1][2].Imagen}}"/>
+        <div>
+          <p style="font-size: 13px">{{cards[actualPage - 1][2].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][2].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="cards[actualPage - 1][3]">
+        <img src="{{cards[actualPage - 1][3].Imagen}}"/>
+        <div>
+          <p style="font-size: 13px">{{cards[actualPage - 1][3].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][3].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <tr style="height: 475;">
+    <td>
+     <div *ngIf="cards[actualPage - 1][4]">
+        <img src="{{cards[actualPage - 1][4].Imagen}}"/>
+        <div>
+          <p style="font-size: 13px">{{cards[actualPage - 1][4].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][4].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="cards[actualPage - 1][5]">
+        <img src="{{cards[actualPage - 1][5].Imagen}}"/>
+        <div>
+          <p style="font-size: 13px">{{cards[actualPage - 1][5].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][5].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+     <div *ngIf="cards[actualPage - 1][6]">
+        <img src="{{cards[actualPage - 1][6].Imagen}}"/>
+        <div>
+          <p style="font-size: 13px">{{cards[actualPage - 1][6].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][6].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div *ngIf="cards[actualPage - 1][7]">
+        <img src="{{cards[actualPage - 1][7].Imagen}}" />
+        <div>
+          <p style="font-size: 13px">{{cards[actualPage - 1][7].Title}}</p>
+        </div>
+        <div>
+          <p>{{cards[actualPage - 1][7].fechaActualizacion}}</p>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+<div style="margin: auto;" >
+  <table>
+    <tr>
+      <td>
+        <button type="button" (click)="changeBack()" [disabled]="bandBack">Anterior</button>
+      </td>
+      <td>
+        <span>{{actualPage}} de <strong>{{Pages}}</strong></span>
+      </td>
+      <td>
+        <button type="button" (click)="changeForward()" [disabled]="bandFwd">Siguiente</button>
+      </td>
+
+    </tr>
+
+  </table>
+</div>

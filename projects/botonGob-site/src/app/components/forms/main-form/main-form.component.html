@@ -1,0 +1,23 @@
+<form autocomplete="off" [formGroup]="mainForm">
+  <input formControlName="id" type="hidden" />
+  <mat-form-field style="width: 100%;">
+    <input formControlName="title" matInput maxlength="30" placeholder="Título *" />
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="chip-list">
+    <mat-chip-list #chipList aria-label="Búsqueda">
+      <mat-chip *ngFor="let item of keywords" [removable]="true" (removed)="removeKeyword(item)">
+        {{ item }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Palabras clave"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addKeyword($event)">
+    </mat-chip-list>
+  </mat-form-field>
+
+</form>

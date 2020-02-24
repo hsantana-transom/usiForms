@@ -1,0 +1,68 @@
+<form autocomplete="off" [formGroup]="mainForm">
+  <input formControlName="id" type="hidden" />
+  <mat-form-field style="width: 100%;">
+    <input formControlName="title" matInput maxlength="40" placeholder="Título *" />
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%">
+      <mat-form-field>
+        <input formControlName="newsDate" [matDatepicker]="newsDate" matInput placeholder="Fecha de Actualización *" readonly />
+        <mat-datepicker-toggle matSuffix [for]="newsDate"></mat-datepicker-toggle>
+        <mat-datepicker #newsDate></mat-datepicker>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxFlex="50%">
+      <mat-form-field style="margin-right: 10px;">
+        <mat-label>Mes *</mat-label>
+        <mat-select formControlName="month">
+          <mat-option *ngFor="let mes of months" [value]="mes">
+            {{mes}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50%">
+      <mat-form-field>
+        <mat-label>Año *</mat-label>
+        <mat-select formControlName="year">
+          <mat-option *ngFor="let y of years" [value]="y">
+            {{y}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column">
+    <section>
+      <strong>Imagen Portada *</strong>
+      <br />
+      <br />
+      <input (change)="onFileChanged($event)" #fileTnput style="display: none;" type="file" accept="image/x-png,image/jpeg"/>
+      <button (click)="fileTnput.click()" mat-raised-button *ngIf="!fileImage">
+        Seleccionar imagen
+      </button>
+      <span>{{ fileImage?.name }}</span>
+      <button (click)="onDelete()" mat-icon-button matTooltip="Eliminar" *ngIf="fileImage">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <div>
+        <span style="color: red; font-size: 10px;" *ngIf="bandImg">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+      </div>
+    </section>
+  </div>
+</form>

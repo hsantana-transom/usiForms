@@ -1,0 +1,41 @@
+<form autocomplete="off" [formGroup]="mainForm">
+  <input formControlName="id" type="hidden" />
+  <mat-form-field style="width: 100%;">
+    <input formControlName="title" matInput maxlength="23" placeholder="Título *" />
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field style="width: 100%;">
+    <input formControlName="link" matInput maxlength="255" placeholder="Enlace *" />
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field style="width: 100%;">
+    <mat-label >Descripción</mat-label>
+    <textarea formControlName="summary" matInput maxlength="54" rows="1"></textarea>
+    <mat-error>
+      Este campo es obligatorio
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="chip-list">
+    <mat-chip-list #chipList aria-label="Búsqueda">
+      <mat-chip *ngFor="let item of keywords" [removable]="true" (removed)="removeKeyword(item)">
+        {{ item }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Palabras clave"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addKeyword($event)"
+        formControlName="keys">
+    </mat-chip-list>
+  </mat-form-field>
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%">
+      <shared-image-upload-control (change)="checkImage()" label="Imagen principal *" [file]="mainImage" (fileChange)="mainImage = $event"></shared-image-upload-control>
+    </div>
+  </div>
+</form>

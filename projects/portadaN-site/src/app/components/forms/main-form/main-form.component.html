@@ -1,0 +1,242 @@
+<form autocomplete="off" [formGroup]="mainForm">
+  <input formControlName="id" type="hidden" />
+  <div fxLayout="column" fxLayoutAlign="space-between left" >
+    <div>
+      <mat-form-field style="width: 100%;">
+        <input formControlName="title" matInput maxlength="86" placeholder="Título *" />
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field style="width: 100%;" >
+        <mat-label>Descripción corta *</mat-label>
+        <textarea formControlName="summary" matInput maxlength="100" rows="1"></textarea>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <input formControlName="created" matInput maxlength="255" placeholder="Creador de la noticia" />
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Puntos relevantes
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-form-field style="width: 100%;" >
+      <mat-label>1.</mat-label>
+      <input formControlName="point1" matInput maxlength="200" placeholder="Punto 1">
+    </mat-form-field>
+    <mat-form-field style="width: 100%;" >
+      <mat-label>2.</mat-label>
+      <input formControlName="point2" matInput maxlength="200" placeholder="Punto 2">
+    </mat-form-field>
+  </mat-expansion-panel>
+  <div style="margin-top: 2px;">
+    <mat-label>Noticia Completa *</mat-label>
+    <ckeditor [editor]="Editor" (ready)="onReady($event)" formControlName="completedNews" (change)="onControlChange()"></ckeditor>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div >
+      <mat-form-field>
+        <input formControlName="newsDate" [matDatepicker]="newsDate" matInput placeholder="Fecha noticia *" readonly />
+        <mat-datepicker-toggle matSuffix [for]="newsDate"></mat-datepicker-toggle>
+        <mat-datepicker #newsDate></mat-datepicker>
+        <mat-error>
+          Este campo es obligatorio
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-form-field class="chip-list">
+    <mat-chip-list #chipList aria-label="Búsqueda">
+      <mat-chip *ngFor="let item of keywords" [removable]="true" (removed)="removeKeyword(item)">
+        {{ item }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Palabras clave"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addKeyword($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  <div>
+    <mat-checkbox formControlName="video" (change)="onVideoSelected()">Video</mat-checkbox>
+  </div>
+    <mat-form-field style="width:100%" *ngIf="checkVideo">
+      <input formControlName="url" matInput maxlength="255" placeholder="URL *" />
+      <mat-error>
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div fxFlex="50%">
+        <shared-image-upload-control label="Imagen principal *" [file]="mainImage" (fileChange)="mainImage = $event"></shared-image-upload-control>
+      </div>
+    </div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Imagenes Extras
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <table style="width:100%">
+          <tr>
+            <th>
+              <section>
+                <strong>Imagen1</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen1')" #fileTnput1 style="display: none;" type="file" />
+                <button (click)="fileTnput1.click()" mat-raised-button *ngIf="!Imagen1">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen1?.name }}</span>
+                <button (click)="onDelete('Imagen1')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen1">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg1">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+            <th>
+              <section>
+                <strong>Imagen2</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen2')" #fileTnput2 style="display: none;" type="file" />
+                <button (click)="fileTnput2.click()" mat-raised-button *ngIf="!Imagen2">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen2?.name }}</span>
+                <button (click)="onDelete('Imagen2')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen2">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg2">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <section>
+                <strong>Imagen3</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen3')" #fileTnput3 style="display: none;" type="file" />
+                <button (click)="fileTnput3.click()" mat-raised-button *ngIf="!Imagen3">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen3?.name }}</span>
+                <button (click)="onDelete('Imagen3')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen3">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg3">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+            <th>
+              <section>
+                <strong>Imagen4</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen4')" #fileTnput4 style="display: none;" type="file" />
+                <button (click)="fileTnput4.click()" mat-raised-button *ngIf="!Imagen4">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen4?.name }}</span>
+                <button (click)="onDelete('Imagen4')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen4">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg4">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <section>
+                <strong>Imagen5</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen5')" #fileTnput5 style="display: none;" type="file" />
+                <button (click)="fileTnput5.click()" mat-raised-button *ngIf="!Imagen5">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen5?.name }}</span>
+                <button (click)="onDelete('Imagen5')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen5">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg5">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+            <th>
+              <section>
+                <strong>Imagen6</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen6')" #fileTnput6 style="display: none;" type="file" />
+                <button (click)="fileTnput6.click()" mat-raised-button *ngIf="!Imagen6">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen6?.name }}</span>
+                <button (click)="onDelete('Imagen6')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen6">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg6">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <section>
+                <strong>Imagen7</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen7')" #fileTnput7 style="display: none;" type="file" />
+                <button (click)="fileTnput7.click()" mat-raised-button *ngIf="!Imagen7">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen7?.name }}</span>
+                <button (click)="onDelete('Imagen7')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen7">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg7">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+            <th>
+              <section>
+                <strong>Imagen8</strong>
+                <br />
+                <input (change)="onFileChanged($event,'Imagen8')" #fileTnput8 style="display: none;" type="file" />
+                <button (click)="fileTnput8.click()" mat-raised-button *ngIf="!Imagen8">
+                  Seleccionar imagen
+                </button>
+                <span>{{ Imagen8?.name }}</span>
+                <button (click)="onDelete('Imagen8')" mat-icon-button matTooltip="Eliminar" *ngIf="Imagen8">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <div>
+                  <span style="color: red; font-size: 10px;" *ngIf="bandImg8">*Las imágenes que tienen un tamaño superior a 1 MB no se podrán cargar.</span>
+                </div>
+              </section>
+            </th>
+          </tr>
+        </table>
+    </mat-expansion-panel>
+
+</form>
