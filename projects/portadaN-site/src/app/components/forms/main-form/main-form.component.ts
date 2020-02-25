@@ -2,12 +2,11 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { of, forkJoin, concat } from 'rxjs';
 import { switchMap, map, tap, delay } from 'rxjs/operators';
 import { FormsService, ImageFile, SharepointIntegrationService } from 'shared-lib';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {UploadAdapter} from './UploadAdapter';
-import { of, forkJoin } from 'rxjs';
-import { SELECT_PANEL_INDENT_PADDING_X } from '@angular/material';
 
 @Component({
   selector: 'app-main-form',
@@ -168,12 +167,17 @@ export class MainFormComponent implements OnInit {
         switchMap(requests => forkJoin(requests)),
         map(([formDigest, response]) => {
           const requests = [];
+
           if (this.Imagen1) {
             const dataImagen1: any = {
               __metadata: { type: 'SP.Data.NoticiasListItem' },
               Id: response.d.Id,
               Imagen1: this.Imagen1.data
             };
+
+            console.log(dataImagen1);
+
+            requests.push(this.sis.save('Noticias', dataImagen1, formDigest));
           }
           if (this.Imagen2) {
             const dataImagen2: any = {
@@ -181,13 +185,17 @@ export class MainFormComponent implements OnInit {
               Id: response.d.Id,
               Imagen2: this.Imagen2.data
             };
+
+            requests.push(this.sis.save('Noticias', dataImagen2, formDigest));
           }
           if (this.Imagen3) {
             const dataImagen3: any = {
               __metadata: { type: 'SP.Data.NoticiasListItem' },
               Id: response.d.Id,
-              Imagen3: this.Imagen3.data
+              Imagen2: this.Imagen3.data
             };
+
+            requests.push(this.sis.save('Noticias', dataImagen3, formDigest));
           }
 
           if (this.Imagen4) {
@@ -196,11 +204,12 @@ export class MainFormComponent implements OnInit {
               Id: response.d.Id,
               Imagen4: this.Imagen4.data
             };
-            this.sis.getFormDigest().pipe(
+            /*this.sis.getFormDigest().pipe(
               switchMap(formDigest => {
                 return this.sis.save('Noticias', dataImagen4, formDigest);
               })
-            ).subscribe();
+            ).subscribe();*/
+            requests.push(this.sis.save('Noticias', dataImagen4, formDigest));
           }
           if (this.Imagen5) {
             const dataImagen5: any = {
@@ -208,11 +217,12 @@ export class MainFormComponent implements OnInit {
               Id: response.d.Id,
               Imagen5: this.Imagen5.data
             };
-            this.sis.getFormDigest().pipe(
+            /*this.sis.getFormDigest().pipe(
               switchMap(formDigest => {
                 return this.sis.save('Noticias', dataImagen5, formDigest);
               })
-            ).subscribe();
+            ).subscribe();*/
+            requests.push(this.sis.save('Noticias', dataImagen5, formDigest));
           }
           if (this.Imagen6) {
             const dataImagen6: any = {
@@ -220,11 +230,12 @@ export class MainFormComponent implements OnInit {
               Id: response.d.Id,
               Imagen6: this.Imagen6.data
             };
-            this.sis.getFormDigest().pipe(
+            /*this.sis.getFormDigest().pipe(
               switchMap(formDigest => {
                 return this.sis.save('Noticias', dataImagen6, formDigest);
               })
-            ).subscribe();
+            ).subscribe();*/
+            requests.push(this.sis.save('Noticias', dataImagen6, formDigest));
 
           }
           if (this.Imagen7) {
@@ -233,11 +244,12 @@ export class MainFormComponent implements OnInit {
               Id: response.d.Id,
               Imagen7: this.Imagen7.data
             };
-            this.sis.getFormDigest().pipe(
+            /*this.sis.getFormDigest().pipe(
               switchMap(formDigest => {
                 return this.sis.save('Noticias', dataImagen7, formDigest);
               })
-            ).subscribe();
+            ).subscribe();*/
+            requests.push(this.sis.save('Noticias', dataImagen7, formDigest));
 
           }
           if (this.Imagen8) {
@@ -246,144 +258,21 @@ export class MainFormComponent implements OnInit {
               Id: response.d.Id,
               Imagen1: this.Imagen8.data
             };
-            this.sis.getFormDigest().pipe(
+            /*this.sis.getFormDigest().pipe(
               switchMap(formDigest => {
                 return this.sis.save('Noticias', dataImagen8, formDigest);
               })
-            ).subscribe();
-
+            ).subscribe();*/
+            requests.push(this.sis.save('Noticias', dataImagen8, formDigest));
           }
+
+          console.log(requests);
+
+          return requests.length > 0 ? requests : of(null);
         }),
-        /*[
-          formDigest,
-          response[1].d.Id
-        ]),
-        tap(response => console.log(response)),
-        map(([formDigest, id]) => {
-          const requests = [];
-          if (this.Imagen1) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen1: this.Imagen1.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen2) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen2: this.Imagen2.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen3) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen3: this.Imagen3.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen4) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen4: this.Imagen4.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen5) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen5: this.Imagen5.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen6) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen6: this.Imagen6.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen7) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen7: this.Imagen7.data,
-            }, formDigest));
-          }
-
-          if (this.Imagen8) {
-            requests.push(this.sis.save('Noticias', {
-              Id: id,
-              Imagen8: this.Imagen8.data,
-            }, formDigest));
-          }*/
-
-          /*['mainImage', 'Imagen1', 'Imagen2', 'Imagen3', 'Imagen4', 'Imagen5', 'Imagen6', 'Imagen7', 'Imagen8']
-            .forEach(image => {
-              if (this[image] !== undefined) {
-                const imageData: any = {
-                  Id: id
-                };
-                imageData[image] = this[image];
-
-                console.log(imageData);
-
-                requests.push(this.sis.save('Noticias', imageData, formDigest));
-              }
-            });*/
-
-         // return requests.length > 0 ? requests : of(null);
-        //}),
-        //switchMap(requests => forkJoin(requests))
+        switchMap(requests => concat(requests))
       );
   }
-
-  /*submit() {
-    const values = this.mainForm.value;
-
-    values.keywords = this.keywords;
-    values.mainImage = this.mainImage;
-    values.Image1 = this.Imagen1 ? this.Imagen1 : null;
-    values.Image2 = this.Imagen2 ? this.Imagen2 : null;
-    values.Image3 = this.Imagen3 ? this.Imagen3 : null;
-    values.Image4 = this.Imagen4 ? this.Imagen4 : null;
-    values.Image5 = this.Imagen5 ? this.Imagen5 : null;
-    values.Image6 = this.Imagen6 ? this.Imagen6 : null;
-    values.Image7 = this.Imagen7 ? this.Imagen7 : null;
-    values.Image8 = this.Imagen8 ? this.Imagen8 : null;
-
-    const data: any = {
-      __metadata: { type: 'SP.Data.NoticiasListItem' },
-      Descripcion: values.summary,
-      Fechanoticia: values.newsDate.toISOString(),
-      Imagen: this.mainImage.data,
-      Imagen1: this.Imagen1 ? this.Imagen1.data : null,
-      Imagen2: this.Imagen2 ? this.Imagen2.data : null,
-      Imagen3: this.Imagen3 ? this.Imagen3.data : null,
-      Imagen4: this.Imagen4 ? this.Imagen4.data : null,
-      Imagen5: this.Imagen5 ? this.Imagen5.data : null,
-      Imagen6: this.Imagen6 ? this.Imagen6.data : null,
-      Imagen7: this.Imagen7 ? this.Imagen7.data : null,
-      Imagen8: this.Imagen8 ? this.Imagen8.data : null,
-      Noticia: values.completedNews,
-      PalabrasClave: this.keywords.join(','),
-      Title: values.title,
-      punto1: values.punto1,
-      punto2: values.punto2,
-      video: this.checkVideo,
-      url: values.url,
-    };
-
-    if (values.id) {
-      data.Id = values.id;
-    }
-
-    this.nItems=this.nItems+1;
-    return this.sis.getFormDigest().pipe(
-      switchMap(formDigest => {
-        return this.sis.save('Noticias', data, formDigest);
-      })
-    );
-  }*/
 
   // Custom private methods
 
